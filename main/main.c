@@ -19,7 +19,7 @@
 #define X_OFF     1
 #define Y_OFF     2
 
-#define C_BLACK     0x0000
+#define C_BLACK     0x0000 // black
 #define C_WHITE     0xFFFF
 #define C_NAVY      0x000F
 #define C_DKBLUE    0x0011
@@ -37,14 +37,15 @@
 #define C_LGRAY     0xC618
 #define C_GOLD      0xFEA0
 
-typedef struct {
+typedef struct 
+{
     float goal_L;    // total bottle capacity
     float drunk_L;   // amount already consumed (removed from bottle)
 } WaterState;
 
 static uint16_t fb[LCD_W * LCD_H];
 
-static inline void fb_set(int x, int y, uint16_t color)
+static inline void fb_set(int x, int y, uint16_t color) // set pixel in framebuffer, does boundary check
 {
     if (x < 0 || x >= LCD_W || y < 0 || y >= LCD_H) return;
     fb[y * LCD_W + x] = color;
@@ -52,11 +53,11 @@ static inline void fb_set(int x, int y, uint16_t color)
 
 static spi_device_handle_t spi;
 
-static void lcd_cmd(uint8_t cmd)
+static void lcd_cmd(uint8_t cmd)// send a command to the LCD
 {
     gpio_set_level(PIN_NUM_DC, 0);
     spi_transaction_t t = { .length = 8, .tx_buffer = &cmd };
-    spi_device_polling_transmit(spi, &t);
+    spi_device_polling_transmit(spi, &t);// send the command
 }
 
 static void lcd_data(const uint8_t *data, int len)
